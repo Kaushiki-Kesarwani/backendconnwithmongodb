@@ -40,8 +40,54 @@ router.post('/users', async (req, res) => {
   }
 });
 
+//update
+router.put('/users/:id',async(req,res)=>{
+  const {id} = req.params;
+  const {name,creditedAt} = req.body;
+  try{
+    const updatedUser = await Task.findByIdAndUpdate(id,{name,creditedAt});
+    if(!updatedUser){
+      res.json({
+        message:"user not found"
+      })
+    }
+    res.status(200).json({
+      success:true,
+      user:updatedUser,
+    })
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+
+});
 
 
+//delete
+router.delete('/users/:id',async(req,res)=>{
+  const {id} = req.params;
+  try{
+    const deletedUser = await Task.findByIdAndDelete(id);
+
+    if(!deletedUser){
+      res.json({
+        message:"user not found",
+      })
+    }
+
+    res.status(200).json({
+      success:true,
+      user:deletedUser,
+    })
+  }catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+});
 
 
 module.exports = router;
